@@ -10,6 +10,8 @@
   <body>
     <h1>Todo List</h1>
     <section id="controlSection">
+      <span>Number of tasks: </span>
+      <span id="counter"></span> <br>
       <input type="text" id="text-input">
       <select name="task-priority" id="priority-selector">
         <option value="1">1</option>
@@ -19,10 +21,12 @@
         <option value="5">5</option>
       </select>
       <button id="add-button">add</button>
-      
+      <button id="sort-button">sort</button>
     </section>
     <section id="viewSection">
-      
+        <ul id="list-of-tasks">
+
+        </ul>
     </section>
   </body>
 </html>
