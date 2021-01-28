@@ -9,7 +9,9 @@ document.addEventListener("DOMContentLoaded", function() {
     let taskIndex = 1;
     let listOfTasks = [];
     let taskCounter = 0;
-
+    let id;
+    getFromJsonbin();
+   
     spanCounter.innerText = taskCounter ;
     addButton.addEventListener("click",addTask);
     sortButton.addEventListener("click",sortTasks) 
@@ -23,18 +25,20 @@ document.addEventListener("DOMContentLoaded", function() {
             ul.append(listOfTasks[i].li);
          }
     }
-   // =  listOfTasks[i].li;
+
     function addTask(){
         const date = sqlFormatDate(new Date);
         const task = createTaskObject(date);
         const li = createHtmlTags(task);
         task.li = li;
-        ul.append(li)
-        console.log(listOfTasks);
+        ul.append(li);
         input.value = "";
-        spanCounter.innerText = ++taskCounter ;
+        spanCounter.innerText = ++taskCounter;
+        updateJsonbinStorage();
+      
     }
     
+
     function sortByPriority(a,b){
         if(a.priority > b.priority)
             return -1;
@@ -63,14 +67,13 @@ document.addEventListener("DOMContentLoaded", function() {
         return li;
     }
 
-    
-
     function createTaskObject(creationDate){
         const task = {priority: prioritySelector.value,
             date: creationDate,
             description: input.value,
             index: taskIndex++
         };
+        console.log(task);
         listOfTasks.push(task);
         return task;
     }
@@ -82,4 +85,24 @@ document.addEventListener("DOMContentLoaded", function() {
         return date;
     }
 
+    async function updateJsonbinStorage(){
+        const response = await fetch('https://api.jsonbin.io/v3/b/6012f56f050e9474fe36b2f5 ',
+            { method: 'PUT',
+              headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'},
+              body: JSON.stringify({listOfTasks})});
+        console.log(response);
+    }
+    
+    async function getFromJsonbin(){
+             const response = await fetch('https://api.jsonbin.io/v3/b/6012f56f050e9474fe36b2f5',
+            {method: 'GET',headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'}});
+        if(response.ok){
+            const responseText = await response.text();
+            let responseParse = JSON.parse(responseText);
+            listOfTasks.push(responseParse.record);
+            console.log(listOfTasks);
+        }           
+    }       
 });
+
+
