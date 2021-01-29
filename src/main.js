@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", function() {
     
     spanCounter.innerText = taskCounter ;
     addButton.addEventListener("click",addTask);
-    sortButton.addEventListener("click",sortTasks) 
-
+    sortButton.addEventListener("click",sortTasks);
+   
     function sortTasks(){
         listOfTasks.sort(sortByPriority);
         for(let i = 0; i < listOfTasks.length; i++){
@@ -68,6 +68,11 @@ document.addEventListener("DOMContentLoaded", function() {
         taskContainer.append(taskText);
         taskText.className = "todo-text";
         taskText.innerText = task.description;
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-button";
+        deleteButton.innerText = "Delete";
+        deleteButton.addEventListener("click",deleteTask);
+        taskContainer.append(deleteButton);
         li.append(taskContainer);
         return li;
     }
@@ -78,7 +83,6 @@ document.addEventListener("DOMContentLoaded", function() {
             description: input.value,
             index: taskIndex++
         };
-        console.log(task);
         return task;
     }
       
@@ -111,6 +115,21 @@ document.addEventListener("DOMContentLoaded", function() {
             else listOfTasks = [];
         }          
     }    
+    function deleteTask(event){
+        const li = this.closest("li");
+        temp = li;
+        taskIndex--;
+        taskCounter--;
+        for(let i = 0; i < listOfTasks.length; i++){
+            if(listOfTasks[i].li === li){
+                listOfTasks.splice(i,1);
+                break;
+            }
+        }
+        console.log(listOfTasks);
+        li.remove();
+        updateJsonbinStorage();        
+    }
     // async function creatJsonBin(){
     //     console
     //     const response = await fetch('https://api.jsonbin.io/v3/b',

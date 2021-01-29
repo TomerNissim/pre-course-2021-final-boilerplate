@@ -1,0 +1,42 @@
+body{
+    background-color: #434343;
+
+}
+#Control{
+    /* background-color: #434343; */
+    color: white;
+    text-align: center;
+}
+h1{
+    font-family: cursive,Monospace,sans-serif;
+    font-size: 7vh;
+    font-stretch:extra-expanded;
+    text-shadow: 3px 3px 3px #ababab;
+}
+#View{
+    background-color: #a6a5f3 !important;
+    font-size: 4vh;
+} 
+.todo-text{
+    padding: 10px;
+}
+.todo-created-at{
+    padding: 10px;
+    width: 20%;
+}
+.todo-priority{
+    padding: 10px;
+}
+
+.deleteButton{
+    float: right;
+    margin-left: 70vw;
+    width: 20%;
+    color: teal;
+}  
+ul {
+    list-style-image: url(check-mark.png);
+    background-position: 0 0;
+  background-size: 1.6rem 1.6rem;
+  background-repeat: no-repeat;
+}
