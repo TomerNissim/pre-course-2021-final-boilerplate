@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function() {
     let taskIndex = 1;
     let listOfTasks = [];
     let taskCounter = 0;
-    let id;
     getFromJsonbin();
-   
+    
+    
     spanCounter.innerText = taskCounter ;
     addButton.addEventListener("click",addTask);
     sortButton.addEventListener("click",sortTasks) 
@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function sortTasks(){
         listOfTasks.sort(sortByPriority);
         for(let i = 0; i < listOfTasks.length; i++){
+            console.log(listOfTasks)
            ul.removeChild(listOfTasks[i].li);
         }
         for(let i = 0; i < listOfTasks.length; i++){
@@ -28,16 +29,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function addTask(){
         const date = sqlFormatDate(new Date);
-        const task = createTaskObject(date);
-        const li = createHtmlTags(task);
-        task.li = li;
-        ul.append(li);
+        let newTask = createTaskObject(date);
         input.value = "";
-        spanCounter.innerText = ++taskCounter;
+        displayTask(newTask);
+        listOfTasks.push(newTask);
         updateJsonbinStorage();
-      
     }
-    
+
+    function displayTask(task){
+        console.log(task)
+        const li = createHtmlTags(task);
+        task.li = li
+        ul.append(li);
+        spanCounter.innerText = ++taskCounter;
+    }
 
     function sortByPriority(a,b){
         if(a.priority > b.priority)
@@ -74,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function() {
             index: taskIndex++
         };
         console.log(task);
-        listOfTasks.push(task);
         return task;
     }
       
@@ -85,24 +89,39 @@ document.addEventListener("DOMContentLoaded", function() {
         return date;
     }
 
-    async function updateJsonbinStorage(){
-        const response = await fetch('https://api.jsonbin.io/v3/b/6012f56f050e9474fe36b2f5 ',
+ async function updateJsonbinStorage(){
+        const response = /*await*/ fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4',
             { method: 'PUT',
               headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'},
-              body: JSON.stringify({listOfTasks})});
-        console.log(response);
+              body: JSON.stringify(listOfTasks)});
     }
     
     async function getFromJsonbin(){
-             const response = await fetch('https://api.jsonbin.io/v3/b/6012f56f050e9474fe36b2f5',
+             const response = await fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4/latest',
             {method: 'GET',headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'}});
         if(response.ok){
             const responseText = await response.text();
             let responseParse = JSON.parse(responseText);
-            listOfTasks.push(responseParse.record);
-            console.log(listOfTasks);
-        }           
-    }       
+            listOfTasks = responseParse.record;
+            if(listOfTasks[0] !== false){
+                for(let i =0;i<listOfTasks.length;i++){
+                    displayTask(listOfTasks[i]);
+                }
+            }
+            else listOfTasks = [];
+        }          
+    }    
+    // async function creatJsonBin(){
+    //     console
+    //     const response = await fetch('https://api.jsonbin.io/v3/b',
+    //     {method: 'POST',
+    //     headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project','X-Bin-Private':'false'	 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'},
+    //     body: JSON.stringify(listOfTasks)});
+
+    // }   
 });
 
+   
 
+
+    
