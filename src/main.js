@@ -173,7 +173,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             else listOfTasks = [];
-            taskIndex = listOfTasks[listOfTasks.length - 1].index + 1;
+            if(listOfTasks.length > 0)
+                taskIndex = listOfTasks[listOfTasks.length - 1].index + 1;
         }          
     }
 
@@ -196,8 +197,10 @@ document.addEventListener("DOMContentLoaded", function() {
     function taskCheck(){
         const li = this.closest("li");
         const task = getTaskFromListOfTask(li);
-        task.check = !task.check
-        li.classList.toggle("check")
+        if(task !== null){
+            task.check = !task.check
+            li.classList.toggle("check")
+        }
     }
 
     function taskEdit(){
@@ -243,6 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return listOfTasks[i];
             }
         }
+        return null;
     }    
 
     function sqlFormatDate(date){
