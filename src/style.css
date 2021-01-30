@@ -14,7 +14,7 @@ h1{
     text-shadow: 3px 3px 3px #ababab;
 }
 #View{
-    background-color: #a6a5f3 !important;
+    background-color: orange !important;
     font-size: 4vh;
 } 
 .todo-text{
@@ -41,4 +41,7 @@ h1{
 } */
 .check{
     color: red;
+}
+.markEdit{
+    background-color: teal; 
 }

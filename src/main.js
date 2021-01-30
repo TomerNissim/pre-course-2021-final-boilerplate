@@ -6,14 +6,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const ul = document.getElementById("list-of-tasks");
     const spanCounter = document.getElementById("counter");
     const sortButton = document.getElementById("sort-button");
-    let editInputTemp;
-    let editPrioritySelectorTemp;
+    const updateButton = document.getElementById("update-button");    
     let taskIndex = 1;
     let listOfTasks = [];
     let taskCounter = 0;
     let lastDeletedLi;
+    let liEditClicked;
     getFromJsonbin();
     
+    updateButton.hidden = true
     spanCounter.innerText = taskCounter ;
     addButton.addEventListener("click",addTask);
     sortButton.addEventListener("click",sortTasks);
@@ -37,6 +38,16 @@ document.addEventListener("DOMContentLoaded", function() {
         ul.append(li);
         spanCounter.innerText = ++taskCounter;
         console.log(li);
+    }
+
+    function createTaskObject(creationDate){
+        const task = {priority: prioritySelector.value,
+            date: creationDate,
+            description: input.value,
+            check: false,
+            index: taskIndex++
+        };
+        return task;
     }
 
     function createHtmlTags(task){
@@ -65,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
             taskContainer.append(editButton);
         editButton.addEventListener("click",taskEdit);
         deleteButton.addEventListener("click",deleteTask);
+        updateButton.addEventListener("click",taskUpdate);
         li.append(taskContainer);
         li.addEventListener("dblclick",taskCheck);
         li.onmousedown = function() {
@@ -73,17 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return li;
     }
 
-    function createTaskObject(creationDate){
-        const task = {priority: prioritySelector.value,
-            date: creationDate,
-            description: input.value,
-            check: false,
-            index: taskIndex++
-        };
-        return task;
-    }
-
-//sorting   functions
+//sorting functions
 //       
     function sortTasks(){
         listOfTasks.sort(sortByPriority);
@@ -104,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return 0;
     }
 
-// JSONBIN function  
+// JSONBIN functions  
 //
  async function updateJsonbinStorage(){
         const response = /*await*/ fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4',
@@ -129,8 +131,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }          
     }
 
-//  delete,check,edit function   
-   
+//  delete,check,edit functions
+//   
     function deleteTask(event){
         const li = this.closest("li");
         lastDeletedLi = li;
@@ -153,18 +155,30 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function taskEdit(){
+        updateButton.classList.toggle("update-Button");
+        updateButton.hidden = !updateButton.hidden
         let li = this.closest("li");
-        for(let i = 0; i < listOfTasks.length; i++){
-            if(listOfTasks[i].li === li){
-              let task = listOfTasks[i];
-              task.description = input.value;
-              task.priority = prioritySelector.value;
-              displayTask(task);
-            }
-        }
+        li.classList.toggle("markEdit");
+        liEditClicked = li;
+        let task = getTaskFromListOfTask(li);
+        input.value = task.description;
+        prioritySelector.value = task.priority;
+    }
+    function taskUpdate(){
+        let task = getTaskFromListOfTask(liEditClicked);
+        task.description = input.value;
+        task.priority = prioritySelector.value;
+        updateJsonbinStorage();
+        let todoText = liEditClicked.querySelector(".todo-text");
+        let todoPriority = liEditClicked.querySelector(".todo-priority");
+        todoText.innerText = task.description;
+        todoPriority.innerText = task.priority;
+        liEditClicked.classList.toggle("markEdit")
+        console.log(listOfTasks); 
+        updateButton.hidden = true;
     }
 
-// etc function
+// etc functions
 //
     function getTaskFromListOfTask(li){
         for(let i = 0; i < listOfTasks.length; i++){
