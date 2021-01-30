@@ -34,14 +34,16 @@ h1{
     width: 20%;
     color: teal;
 }  
-/* ul {
-    list-style-image: url(check-mark.png);
-    list-style-image: ;
-   
-} */
 .check{
-    color: red;
+    text-decoration: line-through;
+    color: rgba(8, 189, 18);
 }
-.markEdit{
-    background-color: teal; 
+.markEdit {
+    border: 3px solid #fa0505;
+}
+.family-category{
+    color:indigo;
+}
+.work-category{
+    color:blue;
 }
