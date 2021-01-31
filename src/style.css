@@ -1,49 +1,91 @@
 body{
-    background-color: #434343;
-
+    background-image: url("wood-background-wallpaper-preview.jpg");
+    background-size: cover;
 }
 #Control{
     /* background-color: #434343; */
     color: white;
     text-align: center;
+    font-size: 1.8vw;
 }
+
+#View{
+    background-image: url("old-paper-background-with-place-for-text-vector-25651897.jpg");
+    /* background-image: url("pngtree-vintage-old-paper-background-paperbackgroundpaper-image_79357.jpg");  */
+    background-size: cover;
+    padding:3%;
+    margin: auto;
+    font-size: 1.8vw;
+    width: 60vw;
+    height: 100%;
+    box-shadow: 1vw 1vh 1vh  black;
+    border: 0.1vw solid;
+} 
 h1{
     font-family: cursive,Monospace,sans-serif;
     font-size: 7vh;
     font-stretch:extra-expanded;
     text-shadow: 3px 3px 3px #ababab;
+    text-align: center;
+    color: white;
+
 }
-#View{
-    background-color: orange !important;
-    font-size: 4vh;
-} 
+/* #counter-div{
+    font-size: 1.8vw;
+} */
+.todo-container{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: baseline;
+
+}
 .todo-text{
     padding: 10px;
+    /* border: 3px solid #fa0505; */
+    width: 22vw;
+    overflow:auto;
 }
 .todo-created-at{
-    padding: 10px;
-    width: 20%;
-}
-.todo-priority{
-    padding: 10px;
+    margin-left: 0.5vw;
+    margin-right: 2vw;
+    padding: 1%;
+
 }
 
-.deleteButton{
+.edit-button{
+    display: inline;
     float: right;
-    margin-left: 70vw;
-    width: 20%;
-    color: teal;
+    font-size: 1vw;
+}
+.delete-button{
+    display: flex;
+    justify-content: flex-end;
+    align-items:flex-end;
+    font-size: 1vw;
+
 }  
 .check{
     text-decoration: line-through;
     color: rgba(8, 189, 18);
 }
 .markEdit {
-    border: 3px solid #fa0505;
+    border: 2px solid #5b05fa;
+}
+.general-category{
+    width: 6vw;
+    margin-left: 1vw;
 }
 .family-category{
-    color:indigo;
+    color:rgb(194, 26, 26);
+    width: 6vw;
+    margin-left: 1vw;
+
 }
 .work-category{
     color:blue;
+    width: 6vw;
+    margin-left: 1vw;
 }
+/* @media only screen and (max-width: 600px) {
+    font-size: ;
+} */

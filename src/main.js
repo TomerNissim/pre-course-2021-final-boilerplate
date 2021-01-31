@@ -9,10 +9,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const updateButton = document.getElementById("update-button");   
     const sortSelect = document.getElementById("sort-selector");
     const categorySelector = document.getElementById("category-selector");
+    const undobutton = document.getElementById("undo-button");
     let taskIndex = 1;
     let listOfTasks = [];
     let taskCounter = 0;
-    let lastDeletedLi = null;
+    let lastDeletedTask = null;
     let liEditClicked = null;
     let sortedBy = "priority";
     let bin =  {"my-todo": listOfTasks}
@@ -22,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
     spanCounter.innerText = taskCounter ;
     addButton.addEventListener("click",addTask);
     sortButton.addEventListener("click",sortTasks);
-
+    undobutton.addEventListener("click",undoTask);
 //  the main functions of the project
 //
     function addTask(){
@@ -182,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function() {
 //   
     function deleteTask(event){
         const li = this.closest("li");
-        lastDeletedLi = li;
+        lastDeletedTask = getTaskFromListOfTask(li);
         spanCounter.innerText = --taskCounter;
         for(let i = 0; i < listOfTasks.length; i++){
             if(listOfTasks[i].li === li){
@@ -192,6 +193,15 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         updateJsonbinStorage();        
         li.remove();
+        console.log(lastDeletedTask)
+
+    }
+
+    function undoTask(){
+        if(lastDeletedTask !== null){
+            displayTask(lastDeletedTask);
+        }
+        lastDeletedTask = null;
     }
 
     function taskCheck(){
@@ -237,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function() {
         prioritySelector.value = 1;
         liEditClicked = null;
     }
-
+    
 // etc functions
 //
     function getTaskFromListOfTask(li){

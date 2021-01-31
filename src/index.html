@@ -9,10 +9,13 @@
     <link rel="stylesheet" href="./style.css">
   </head>
   <body>
+    <h1>Todo List</h1>
     <section id="Control">
-      <h1>Todo List</h1>
-      <span>Number of tasks: </span>
-      <span id="counter"></span> <br>
+      <div id="top-div">
+        <span>Number of tasks: </span>
+        <span id="counter"></span>
+      </div>
+      <div>
       <input type="text" id="text-input">
       <select name="task-priority" id="priority-selector">
         <option value="1">1</option>
@@ -21,7 +24,6 @@
         <option value="4">4</option>
         <option value="5">5</option>
       </select>
-
       <select name="task-category" id="category-selector">
         <option value="general">General</option>
         <option value="family">Family</option>
@@ -36,8 +38,8 @@
         <option value="priority">Sort by Priority</option>
         <option value="date">Sort by Date</option>
         <option value="category">Sort by Category</option>
-
       </select>
+      <button id="undo-button">Undo</button>
     </section>
 
     <section id="View">
