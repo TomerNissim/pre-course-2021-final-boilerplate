@@ -10,8 +10,8 @@ body{
 }
 
 #View{
-    background-image: url("old-paper-background-with-place-for-text-vector-25651897.jpg");
-    /* background-image: url("pngtree-vintage-old-paper-background-paperbackgroundpaper-image_79357.jpg");  */
+    /* background-image: url("old-paper-background-with-place-for-text-vector-25651897.jpg"); */
+    background-image: url("pngtree-vintage-old-paper-background-paperbackgroundpaper-image_79357.jpg"); 
     background-size: cover;
     padding:3%;
     margin: auto;

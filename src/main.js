@@ -225,9 +225,11 @@ document.addEventListener("DOMContentLoaded", function() {
         let task = getTaskFromListOfTask(li);
         input.value = task.text;
         prioritySelector.value = task.priority;
+        categorySelector.value = task.category;
         if(updateButton.hidden){
             input.value = "";
             prioritySelector.value = 1;
+            categorySelector.value = "general";
             liEditClicked = null;
         }
 

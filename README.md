@@ -1,3 +1,33 @@
+## welcome to my Todo List project
+In this project you I created a Todo List Web Application, in which the user can store prioritized todo tasks and view/sort that list. All the data is saved in JSONbin.io so you can access it from different browsers and places and all the data Will be saved; 
+
+# The structure of the Todo List
+At the top tou can see the header and below that is the number of task that you currant have in your Todo List.
+below that you have the input field and the different buttons that i will elaborate about them in a second.
+Below that you have the list section were all of your tasks will be display and of corse a few more button and fetchers.
+
+# features and usage
+Inside the Web application you can find variety of features that will help tou organize your tasks in the best and easy way it can.
+
+# Add task
+In order to add a task you may enter the task description in the input field.
+afterward you may choose the priority of the task from 1-5, and the category of the task (general, work or family).
+and then just press the add button and the task will be add to your Todo List.
+
+# Edit the task
+In order to edit the task all you need to do is to press the Edit button of the task that you want to edit that locate on the right of the task. After the press the task will be mark in blue border, the the field above will inherit the data from your task (the input, priority and category field). now all you have todo is to change what ever you like and to confirm the change press the "Confirm Update" button that will appear in tje left side of the add button.
+
+# Delete task and Undo button
+If you would like to delete a task all you have to do is click the delete button on the right side of the task that you want to delete, and the task will be gone. but what if you regret your decision? for undo your task delete just click on the undo button that locate on the input row and all the way to the right. the undo will get you last delete back to the list again.
+
+# sorting
+By default the sort button that locate next to the add button will sort your list by priority. but what if you would want to sort by the date of entered? or by the category? for that there is the field next to the sort button in the right that you can choose the form of sorting. After you choose the sort option, just press again on the sort button to make it happen.
+
+# task finished
+Task finished? congratulation! you may double click at the task and the color will be change to green and the task will add a cross line on it so you will know it finished. In order to remove it from the list you can just press the delete button and the task will be deleted.
+
+
+
 # ![Scale-Up Velocity](./readme-files/logo-main.png) Pre Course Project - Todo List 📋
 
 This project will include most of the topics we have learnt so far.
