@@ -3,12 +3,10 @@ body{
     background-size: cover;
 }
 #Control{
-    /* background-color: #434343; */
     color: white;
     text-align: center;
     font-size: 1.8vw;
 }
-
 #View{
     /* background-image: url("old-paper-background-with-place-for-text-vector-25651897.jpg"); */
     background-image: url("pngtree-vintage-old-paper-background-paperbackgroundpaper-image_79357.jpg"); 
@@ -28,20 +26,14 @@ h1{
     text-shadow: 3px 3px 3px #ababab;
     text-align: center;
     color: white;
-
 }
-/* #counter-div{
-    font-size: 1.8vw;
-} */
 .todo-container{
     display: flex;
     flex-flow: row wrap;
     align-items: baseline;
-
 }
 .todo-text{
     padding: 10px;
-    /* border: 3px solid #fa0505; */
     width: 22vw;
     overflow:auto;
 }
@@ -51,7 +43,6 @@ h1{
     padding: 1%;
 
 }
-
 .edit-button{
     display: inline;
     float: right;

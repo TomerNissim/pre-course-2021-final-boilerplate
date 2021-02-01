@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const spanCounter = document.getElementById("counter");
     const sortButton = document.getElementById("sort-button");
     const updateButton = document.getElementById("update-button");   
-    const sortSelect = document.getElementById("sort-selector");
+    const sortSelector = document.getElementById("sort-selector");
     const categorySelector = document.getElementById("category-selector");
     const undobutton = document.getElementById("undo-button");
     let taskIndex = 1;
@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let liEditClicked = null;
     let sortedBy = "priority";
     let bin =  {"my-todo": listOfTasks}
-    getFromJsonbin();
     
+    getFromJsonbin();
     updateButton.hidden = true
     spanCounter.innerText = taskCounter ;
     addButton.addEventListener("click",addTask);
@@ -29,7 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
     function addTask(){
         const date = sqlFormatDate(new Date);
         let newTask = createTaskObject(date);
-        input.value = "";
+        changeInputLineToDefault();
+        // input.value = "";
         displayTask(newTask);
         listOfTasks.push(newTask);
         updateJsonbinStorage();
@@ -107,7 +108,8 @@ document.addEventListener("DOMContentLoaded", function() {
 //sorting functions
 //       
     function sortTasks(){
-        sortedBy = sortSelect.value
+        sortedBy = sortSelector.value;
+        sortSelector.value = "priority";
         switch(sortedBy){
             case "priority":
                 listOfTasks.sort(sortByPriority);
@@ -126,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function() {
             ul.append(listOfTasks[i].li);
          }
     }
+
     function sortByCategory(a,b){
         if(a.category > b.category){
             return 1;
@@ -135,6 +138,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return 0;
             
     }
+
     function sortByDate(a,b){
         if(a.index > b.index){
             return 1;   
@@ -143,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return 0;
     }
+    
     function sortByPriority(a,b){
         if(a.priority > b.priority)
             return -1;
@@ -157,7 +162,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const response = /*await*/ fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4',
             { method: 'PUT',
               headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'},
-              body: JSON.stringify({"my-todo": listOfTasks})});
+              body: JSON.stringify({"my-todo": listOfTasks})
+            });
     }
     
     async function getFromJsonbin(){
@@ -194,7 +200,6 @@ document.addEventListener("DOMContentLoaded", function() {
         updateJsonbinStorage();        
         li.remove();
         console.log(lastDeletedTask)
-
     }
 
     function undoTask(){
@@ -214,26 +219,31 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function taskEdit(){
+        let li = this.closest("li");
         if(liEditClicked !== null){
-            liEditClicked.classList.toggle("markEdit");
-            updateButton.hidden = true;
+            if(liEditClicked!==li){
+                liEditClicked.classList.toggle("markEdit");
+                updateButton.hidden = true;
+            }else{
+                liEditClicked.classList.toggle("markEdit");
+                updateButton.hidden = true;
+                changeInputLineToDefault();
+                // input.value = "";
+                // prioritySelector.value = 1;
+                // categorySelector.value = "general";
+                // liEditClicked = null;
+                return;
+            }
         }
         updateButton.hidden = !updateButton.hidden
-        let li = this.closest("li");
         li.classList.toggle("markEdit");
         liEditClicked = li;
         let task = getTaskFromListOfTask(li);
         input.value = task.text;
         prioritySelector.value = task.priority;
         categorySelector.value = task.category;
-        if(updateButton.hidden){
-            input.value = "";
-            prioritySelector.value = 1;
-            categorySelector.value = "general";
-            liEditClicked = null;
-        }
-
     }
+
     function taskUpdate(){
         let task = getTaskFromListOfTask(liEditClicked);
         task.text = input.value;
@@ -245,9 +255,11 @@ document.addEventListener("DOMContentLoaded", function() {
         todoPriority.innerText = task.priority;
         liEditClicked.classList.toggle("markEdit")
         updateButton.hidden = true;
-        input.value = "";
-        prioritySelector.value = 1;
-        liEditClicked = null;
+        changeInputLineToDefault();
+        // input.value = "";
+        // prioritySelector.value = 1;
+        // liEditClicked = null;
+        // categorySelector.value = "general";
     }
     
 // etc functions
@@ -266,6 +278,13 @@ document.addEventListener("DOMContentLoaded", function() {
         date = date.slice(0,19);
         date = date.replace("T"," ");
         return date;
+    }
+
+    function changeInputLineToDefault(){
+        input.value = "";
+        prioritySelector.value = 1;
+        liEditClicked = null;
+        categorySelector.value = "general";
     }
 });
 
