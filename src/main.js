@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //  delete,check,edit functions
 //   
-    function deleteTask(event){
+    function deleteTask(){
         const li = this.closest("li");
         lastDeletedTask = getTaskFromListOfTask(li);
         spanCounter.innerText = --taskCounter;
@@ -219,6 +219,8 @@ document.addEventListener("DOMContentLoaded", function() {
     function undoTask(){
         if(lastDeletedTask !== null){
             displayTask(lastDeletedTask);
+            listOfTasks.push(lastDeletedTask);
+            updateJsonbinStorage();
         }
         lastDeletedTask = null;
     }
