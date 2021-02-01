@@ -9,28 +9,32 @@ document.addEventListener("DOMContentLoaded", function() {
     const updateButton = document.getElementById("update-button");   
     const sortSelector = document.getElementById("sort-selector");
     const categorySelector = document.getElementById("category-selector");
-    const undobutton = document.getElementById("undo-button");
+    const undoButton = document.getElementById("undo-button");
     let taskIndex = 1;
     let listOfTasks = [];
     let taskCounter = 0;
     let lastDeletedTask = null;
     let liEditClicked = null;
     let sortedBy = "priority";
-    let bin =  {"my-todo": listOfTasks}
+    let draggingLi;
+    let draggingY;
+    let dragNdropIndex;
     
+    if(dragNdropIndex === undefined)
+        dragNdropIndex = 1;
     getFromJsonbin();
-    updateButton.hidden = true
+    updateButton.hidden = true;
     spanCounter.innerText = taskCounter ;
     addButton.addEventListener("click",addTask);
     sortButton.addEventListener("click",sortTasks);
-    undobutton.addEventListener("click",undoTask);
+    undoButton.addEventListener("click",undoTask);
+
 //  the main functions of the project
 //
     function addTask(){
         const date = sqlFormatDate(new Date);
         let newTask = createTaskObject(date);
         changeInputLineToDefault();
-        // input.value = "";
         displayTask(newTask);
         listOfTasks.push(newTask);
         updateJsonbinStorage();
@@ -38,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function displayTask(task){
         const li = createHtmlTags(task);
-        task.li = li
+        task.li = li;
         ul.append(li);
         spanCounter.innerText = ++taskCounter;
     }
@@ -49,13 +53,15 @@ document.addEventListener("DOMContentLoaded", function() {
             text: input.value,
             check: false,
             category: categorySelector.value,
+            dragNdropIndex: dragNdropIndex++,
             index: taskIndex++
         };
         return task;
     }
 
     function createHtmlTags(task){
-        const li = document.createElement("li")
+        const li = document.createElement("li");
+            li.setAttribute("draggable","true");
         const taskContainer = document.createElement("div");
             taskContainer.className = "todo-container";
         const taskPriority = document.createElement("span");
@@ -92,16 +98,15 @@ document.addEventListener("DOMContentLoaded", function() {
             case "work":
                 taskCategory.className = "work-category";
                 break;    
-
         }  
         editButton.addEventListener("click",taskEdit);
         deleteButton.addEventListener("click",deleteTask);
         updateButton.addEventListener("click",taskUpdate);
         li.append(taskContainer);
         li.addEventListener("dblclick",taskCheck);
-        li.onmousedown = function() {
-            return false;
-        };
+        li.addEventListener("dragstart",dragStart);
+        li.addEventListener("dragend",dragEnd);
+        ul.addEventListener("dragover",dragOver);
         return li;
     }
 
@@ -119,7 +124,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
             case "category":
                 listOfTasks.sort(sortByCategory);
-                break;    
+                break; 
+            case "dragNdrop":
+                listOfTasks.sort(sortByDragNdrop);
+                break;
+                // default:
+                //     console.log(1);
         }
         for(let i = 0; i < listOfTasks.length; i++){
            ul.removeChild(listOfTasks[i].li);
@@ -151,10 +161,20 @@ document.addEventListener("DOMContentLoaded", function() {
     function sortByPriority(a,b){
         if(a.priority > b.priority)
             return -1;
-        if(a.priority < b.priority)
+        else if(a.priority < b.priority)
             return 1;
         return 0;
     }
+
+    function sortByDragNdrop(a,b){
+        if(a.dragNdropIndex > b.dragNdropIndex){
+            return 1;
+        }else if(a.dragNdropIndex < b.dragNdropIndex){
+            return -1;
+        }
+        return 0;
+    }       
+
 
 // JSONBIN functions  
 //
@@ -199,7 +219,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         updateJsonbinStorage();        
         li.remove();
-        console.log(lastDeletedTask)
     }
 
     function undoTask(){
@@ -228,10 +247,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 liEditClicked.classList.toggle("markEdit");
                 updateButton.hidden = true;
                 changeInputLineToDefault();
-                // input.value = "";
-                // prioritySelector.value = 1;
-                // categorySelector.value = "general";
-                // liEditClicked = null;
                 return;
             }
         }
@@ -256,12 +271,47 @@ document.addEventListener("DOMContentLoaded", function() {
         liEditClicked.classList.toggle("markEdit")
         updateButton.hidden = true;
         changeInputLineToDefault();
-        // input.value = "";
-        // prioritySelector.value = 1;
-        // liEditClicked = null;
-        // categorySelector.value = "general";
     }
-    
+
+//drag & drop functions
+//
+    function dragStart(event){
+        draggingLi = event.target;
+        draggingLi.className = "dragging";
+    }
+
+    function dragEnd(){
+        draggingLi.classList.remove("dragging");
+        lastDraggedIndexUpdate();
+        updateJsonbinStorage();
+    }
+
+    function dragOver(event){
+        event.preventDefault();
+        draggingY = event.clientY;
+        const afterLi = getDragedLiAfterLi(ul)
+        if(afterLi === null){
+            ul.append(draggingLi);
+        }else{
+            ul.insertBefore(draggingLi,afterLi);
+        }
+    }   
+
+    function getDragedLiAfterLi(ul){
+        const draggableLi = [...ul.querySelectorAll("li:not(.dragging)")];
+        return draggableLi.reduce(closestLi,{offset: Number.NEGATIVE_INFINITY}).element;
+
+    }
+
+    function closestLi(closest,child){
+        const liContainer = child.getBoundingClientRect();
+        const offset = draggingY - liContainer.top - liContainer.height/2;
+        if(offset < 0 && offset > closest.offset){
+            return {offset: offset, element: child};
+        }else{
+            return closest;
+        }
+    }
 // etc functions
 //
     function getTaskFromListOfTask(li){
@@ -272,7 +322,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return null;
     }    
-
     function sqlFormatDate(date){
         date = date.toISOString();
         date = date.slice(0,19);
@@ -285,6 +334,15 @@ document.addEventListener("DOMContentLoaded", function() {
         prioritySelector.value = 1;
         liEditClicked = null;
         categorySelector.value = "general";
+    }
+
+    function lastDraggedIndexUpdate(){
+        let liList = ul.querySelectorAll("li")
+        let task;
+        for(let i = 0; i < liList.length; i++){
+            task = getTaskFromListOfTask(liList[i]);
+            task.dragNdropIndex = i+1;
+        }
     }
 });
 
