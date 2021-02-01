@@ -2,7 +2,7 @@
 In this project I created a Todo List Web Application, in which the user can store prioritized todo tasks and view/sort the task list. All the data is saved in "JSONbin.io" so you can access it from different browsers and places and all the data Will be saved.
 
 ## Link to Github Pages
-
+https://tomernissim.github.io/pre-course-2021-final-boilerplate/src/index.html
 ## The structure of the Todo List
 At the top you can see the header and below that is the number of tasks that you currently have in your Todo List.
 below that you have the input fields and a few buttons that help you manage your ToDo list.
