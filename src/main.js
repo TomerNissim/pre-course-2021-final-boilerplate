@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
 //sorting functions
-//       
+//     
     function sortTasks(){
         sortedBy = sortSelector.value;
         sortSelector.value = "priority";
@@ -128,8 +128,6 @@ document.addEventListener("DOMContentLoaded", function() {
             case "dragNdrop":
                 listOfTasks.sort(sortByDragNdrop);
                 break;
-                // default:
-                //     console.log(1);
         }
         for(let i = 0; i < listOfTasks.length; i++){
            ul.removeChild(listOfTasks[i].li);
@@ -145,8 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }else if(a.category < b.category){
             return -1
         }
-        return 0;
-            
+        return 0;     
     }
 
     function sortByDate(a,b){
@@ -175,14 +172,13 @@ document.addEventListener("DOMContentLoaded", function() {
         return 0;
     }       
 
-
 // JSONBIN functions  
 //
- async function updateJsonbinStorage(){
-        const response = /*await*/ fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4',
+    async function updateJsonbinStorage(){
+        fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4',
             { method: 'PUT',
-              headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'},
-              body: JSON.stringify({"my-todo": listOfTasks})
+                headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'},
+                body: JSON.stringify({"my-todo": listOfTasks})
             });
     }
     
@@ -193,7 +189,6 @@ document.addEventListener("DOMContentLoaded", function() {
             const responseText = await response.json();
             let responseRecord = responseText["record"];
             listOfTasks = responseRecord["my-todo"];
-            console.log(listOfTasks)
             if(listOfTasks[0] !== false){
                 for(let i =0;i<listOfTasks.length;i++){
                     displayTask(listOfTasks[i]);
@@ -232,8 +227,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const li = this.closest("li");
         const task = getTaskFromListOfTask(li);
         if(task !== null){
-            task.check = !task.check
-            li.classList.toggle("check")
+            task.check = !task.check;
+            li.classList.toggle("check");
         }
     }
 
@@ -250,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
         }
-        updateButton.hidden = !updateButton.hidden
+        updateButton.hidden = !updateButton.hidden;
         li.classList.toggle("markEdit");
         liEditClicked = li;
         let task = getTaskFromListOfTask(li);
@@ -268,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let todoPriority = liEditClicked.querySelector(".todo-priority");
         todoText.innerText = task.text;
         todoPriority.innerText = task.priority;
-        liEditClicked.classList.toggle("markEdit")
+        liEditClicked.classList.toggle("markEdit");
         updateButton.hidden = true;
         changeInputLineToDefault();
     }
@@ -289,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function dragOver(event){
         event.preventDefault();
         draggingY = event.clientY;
-        const afterLi = getDragedLiAfterLi(ul)
+        const afterLi = getDraggedLiAfterLi(ul);
         if(afterLi === null){
             ul.append(draggingLi);
         }else{
@@ -297,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }   
 
-    function getDragedLiAfterLi(ul){
+    function getDraggedLiAfterLi(ul){
         const draggableLi = [...ul.querySelectorAll("li:not(.dragging)")];
         return draggableLi.reduce(closestLi,{offset: Number.NEGATIVE_INFINITY}).element;
 
@@ -312,6 +307,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return closest;
         }
     }
+
 // etc functions
 //
     function getTaskFromListOfTask(li){
@@ -322,6 +318,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return null;
     }    
+
     function sqlFormatDate(date){
         date = date.toISOString();
         date = date.slice(0,19);
@@ -337,23 +334,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function lastDraggedIndexUpdate(){
-        let liList = ul.querySelectorAll("li")
+        let liList = ul.querySelectorAll("li");
         let task;
         for(let i = 0; i < liList.length; i++){
             task = getTaskFromListOfTask(liList[i]);
             task.dragNdropIndex = i+1;
         }
     }
-});
-
-   
-// async function creatJsonBin(){
-    //     console
-    //     const response = await fetch('https://api.jsonbin.io/v3/b',
-    //     {method: 'POST',
-    //     headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project','X-Bin-Private':'false'	 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'},
-    //     body: JSON.stringify(listOfTasks)});
-
-    // }   
-
-    
+});     

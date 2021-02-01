@@ -5,29 +5,30 @@ body{
 #Control{
     color: white;
     text-align: center;
-    font-size: 1.8vw;
+    font-weight: bolder;
+    font-size: 2vw;
 }
 #View{
-    /* background-image: url("old-paper-background-with-place-for-text-vector-25651897.jpg"); */
     background-image: url("pngtree-vintage-old-paper-background-paperbackgroundpaper-image_79357.jpg"); 
     background-size: cover;
     padding:3%;
     margin: auto;
     font-size: 1.8vw;
     font-weight: bolder;
-    width: 60vw;
+    width: 70vw;
     height: 100%;
     box-shadow: 1vw 1vh 1vh  black;
     border: 0.1vw solid;
 } 
 h1{
     font-family: cursive,Monospace,sans-serif;
-    font-size: 7vh;
+    font-size: 8vh;
     font-stretch:extra-expanded;
     text-shadow: 3px 3px 3px #ababab;
     text-align: center;
     color: white;
 }
+/* todo */
 .todo-container{
     display: flex;
     flex-flow: row wrap;
@@ -35,7 +36,7 @@ h1{
 }
 .todo-text{
     padding: 10px;
-    width: 22vw;
+    width: 26vw;
     overflow:auto;
 }
 .todo-created-at{
@@ -44,6 +45,7 @@ h1{
     padding: 1%;
 
 }
+/* functions */
 .edit-button{
     display: inline;
     float: right;
@@ -54,7 +56,6 @@ h1{
     justify-content: flex-end;
     align-items:flex-end;
     font-size: 1vw;
-
 }  
 .check{
     text-decoration: line-through;
@@ -63,6 +64,7 @@ h1{
 .markEdit {
     border: 2px solid #5b05fa;
 }
+/* category */
 .general-category{
     width: 6vw;
     margin-left: 1vw;
@@ -79,6 +81,3 @@ h1{
     margin-left: 1vw;
 }
 
-/* @media only screen and (max-width: 600px) {
-    font-size: ;
-} */
