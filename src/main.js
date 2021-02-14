@@ -32,6 +32,10 @@ document.addEventListener("DOMContentLoaded", function() {
 //  the main functions of the project
 //
     function addTask(){
+        if(input.value === ""){
+            alert("Please enter task description")
+            return;
+        }
         const date = sqlFormatDate(new Date);
         let newTask = createTaskObject(date);
         changeInputLineToDefault();
