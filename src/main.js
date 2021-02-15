@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const sortSelector = document.getElementById("sort-selector");
     const categorySelector = document.getElementById("category-selector");
     const undoButton = document.getElementById("undo-button");
+    const loaderSpinner = document.querySelector(".loader");
     let taskIndex = 1;
     let listOfTasks = [];
     let taskCounter = 0;
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     if(dragNdropIndex === undefined)
         dragNdropIndex = 1;
+    loaderSpinner.hidden = false;
     getFromJsonbin();
     updateButton.hidden = true;
     spanCounter.innerText = taskCounter ;
@@ -178,31 +180,66 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // JSONBIN functions  
 //
-    async function updateJsonbinStorage(){
-        fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4',
+    function updateJsonbinStorage(){
+        loaderSpinner.hidden = false;
+        const fetchResponse = fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4',
             { method: 'PUT',
                 headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'},
                 body: JSON.stringify({"my-todo": listOfTasks})
             });
+        fetchResponse.finally(() => {
+            loaderSpinner.hidden = true;
+        });
     }
     
-    async function getFromJsonbin(){
-        const response = await fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4/latest',
+    function getFromJsonbin(){
+        console.log("get From bin");
+        const promiseResponse = fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4/latest',
             {method: 'GET',headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'}});
-        if(response.ok){
-            const responseText = await response.json();
-            let responseRecord = responseText["record"];
-            listOfTasks = responseRecord["my-todo"];
-            if(listOfTasks[0] !== false){
-                for(let i =0;i<listOfTasks.length;i++){
-                    displayTask(listOfTasks[i]);
-                }
+        function getResponseFromBin(res){
+            if(!res.ok){
+                throw new Error("Error with jsonbin");
             }
-            else listOfTasks = [];
-            if(listOfTasks.length > 0)
-                taskIndex = listOfTasks[listOfTasks.length - 1].index + 1;
-        }          
-    }
+                const jasonResPromise = res.json();
+                jasonResPromise.then((json) => {
+                    let responseRecord = json["record"];
+                    listOfTasks = responseRecord["my-todo"];
+                    if(listOfTasks[0] !== false){
+                        for(let i =0;i<listOfTasks.length;i++){
+                            displayTask(listOfTasks[i]);
+                        }
+                    }
+                    else listOfTasks = [];
+                    if(listOfTasks.length > 0)
+                        taskIndex = listOfTasks[listOfTasks.length - 1].index + 1;
+                });
+        }
+        function binError(error){
+            console.log("There was an error: ", error);
+        }
+        promiseResponse.then(getResponseFromBin).catch(binError).finally(() =>{
+            loaderSpinner.hidden = true;
+        });
+    } 
+ 
+    
+    // async function getFromJsonbin(){
+    //     const response = await fetch('https://api.jsonbin.io/v3/b/6013f80a1de5467ca6bdcbd4/latest',
+    //         {method: 'GET',headers: {'Content-Type': 'application/json','X-BIN-NAME': 'tomer-final-todo-list-project', 'X-Master-Key':'$2b$10$r0N4nxOcMRRmC99AgaIA.uT9Y.1OMVam6H4owoZdPjZ3ruVcBDy6u'}});
+    //     if(response.ok){
+    //         const responseText = await response.json();
+    //         let responseRecord = responseText["record"];
+    //         listOfTasks = responseRecord["my-todo"];
+    //         if(listOfTasks[0] !== false){
+    //             for(let i =0;i<listOfTasks.length;i++){
+    //                 displayTask(listOfTasks[i]);
+    //             }
+    //         }
+    //         else listOfTasks = [];
+    //         if(listOfTasks.length > 0)
+    //             taskIndex = listOfTasks[listOfTasks.length - 1].index + 1;
+    //     }          
+    // }
 
 //  delete,check,edit functions
 //   
